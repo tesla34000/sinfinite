@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html >
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content ="width=device-width, initial-scale=1.0">
+<meta name="description" content="Vente de jetons SFN">
+
+<title>Vente de jetons SFN</title>
+
+<script>
+var test =vrai ; // False si les contrats sont sur Mainnet
+var contractAddressSale = '0x75E4fd02637a7BF35D5Bf10BB25C4AA7c64b2096';
+var contractAddressToken = '0xaF960894AC264e9A92f4c6fe81B9EcB54a807019';
+</script>
+
+<style>
+body {font-family : Arial, couleur : #FFA07A ; couleur de fond : ##FFB6C1 ; taille de police : 16 px ; font-weight : 400 ;}
+
+h1 { font-size : 24px ; font-weight : 700 ;}
+h2 { font-size : 22px ; font-weight : 500 ;}
+
+.small {
+font-size : 12px ;
+}
+
+.err {
+couleur : rouge ;
+}
+
+.green {
+couleur : vert ;
+}
+
+.blue {
+couleur : bleu ;
+}
+
+* {
+dimensionnement de la boîte : border-box ;
+}
+
+un {
+couleur : #FFDEAD ;
+décoration de texte : aucune ;
+}
+
+a:hover {
+couleur : #C0C0C0 ;
+}
+
+.clickable {
+curseur : pointeur ;
+}
+
+.clickable:hover {
+couleur : #C0C0C0 ;
+}
+
+bouton {
+couleur de fond : #FFA07A ;
+bordure : aucune ;
+rayon de bordure : 2 px ;
+Couleur blanche;
+rembourrage : 5px 20px ;
+aligner le texte : centrer ;
+décoration de texte : aucune ;
+taille de police : 16 px ;
+affichage : bloc en ligne ;
+marge : 4px 2px ;
+curseur : pointeur ;
+}
+
+bouton : hover {
+background-color : #FFFFFF;
+}
+
+bouton[désactivé] {
+opacité : 0,6 ;
+curseur : non autorisé ;
+}
+
+h {
+marge : 20 px ;
+bordure : 0 ;
+bordure supérieure : 1 pixel en pointillés ;
+}
+
+input {
+text-align: center;
+taille de police : 18 px ;
+couleur de fond : #000000 ;
+couleur : ##FFB6C1 ;
+bordure : solide de 1 pixel ;
+largeur max : 100 % ;
+}
+</style>
+
+</head>
+
+<body>
+
+<div style="text-align : center">
+<button id="connect" style="font-size : 12px">Se connecter</button> <button class="switch" id="ajouterTestBSC " style="taille de police : 12px ;">à BSC Testnet</button>
+<span id="nometamask" class="err" style="display : none">Veuillez d'abord installer Metamask...</span>
+<div class="network small"><span id="curnet "><span class="err">Veuillez utiliser le navigateur/l'extension DApp (par exemple, <a target="_blank" href="https://metamask.io">Metamask</a>)</span></span > <span id="myAddr"></span></div>
+</div>
+
+<div style="text-align : center">
+<h1>Informations sur le jeton</h1>
+<h2><span id=" nom_jeton">sifini</span> (<span class="tokenSymbol">SFN</span>)</h2>
+<p><a target="_blank" href="https://testnet.bscscan.com/token/0xaF960894AC264e9A92f4c6fe81B9EcB54a807019 0xaF960894AC264e9A92f4c6fe81B9EcB54a807019" id="tokenAddress"></a></p>
+<!-- Réservé au cas où vous voudriez afficher les décimales et l'offre totale : Décimales <span id="#tokenDecimals"></span> Approvisionnement total <span id="#tokenSupply"></span>-->
+<p>N'envoyez pas de BNB au contrat de jeton !</p>
+<p><button id="addToken" style="text-align: center">Ajouter à Metamask</button> <button id="copyToken" style="text-align: center">Copier l'adresse</button></p>
+</div>
+
+<hr>
+
+<div style="text-align: center">
+<h1>Jeton état de la vente</h1>
+<h1>
+<span id="finished" style="display:none" class="status green">Terminé</span>
+<span id="addtokens" style="display:none" class ="erreur d'état"><br>Demandez à l'administrateur de la vente de jetons d'approuver le contrat de vente de jetons ou de vérifier le solde des jetons sur le portefeuille !</span>
+<span id="active" style="display:none" class="status green">Actif</span>
+</h1 >
+<p><progress id="progress" value="0" max="100" style="width : 70 %"></progress></p>
+<p>Levé : <span id="raised"> </span> sur <span class="hardcap">40000.0</span> BNB</p>
+<p>Jetons vendus : <span id="sold"></span> sur <span class="saleqty">64000000.0</span> <span class="tokenSymbol">SFN </span></p> <p>Restant : <span id="toraise"></span> BNB (~ <span id="unsold"></span> <span class="tokenSymbol">SFN
+</span>)</p>
+</div>
+<hr>
+
+<div style="text-align: center">
+<h1>Acheter des jetons</h1>
+<p>1 BNB = <span class="rate" >1600.0</span> <span class="tokenSymbol">SFN </span></p> <p><input type="number" id="buyAmount" value="0" min="0"> BNB</p> <p>Vous obtenez : <span id=" obtenir">0</span> <span class="tokenSymbol">SFN SFN
+
+</span></p>
+<p><button id="buyBtn" style="text-align: center">Acheter</button></p>
+<p>Dans mon portefeuille : <span id="myTokens "></span> <span class="tokenSymbol"></span></p>
+</div>
+<hr>
+
+<div style="text-align: center">
+<h1>Informations sur la vente de jetons</h1>
+<p>Hardcap : <span class="hardcap">40000.0</span> BNB (~ <span class="saleqty">64000000.0</span> <span class="tokenSymbol">SFN</span>)</p>
+<p>Taux : 1 BNB = <span class="rate">1600.0</span> <span class="tokenSymbol">SFN</span> (~ <span class="prix">0,000625</span>BNB/<span class="tokenSymbol">SFN</span>)</p>
+
+</div>
+<hr>
+<div style="text-align: center">
+<h1>Contrat de vente</h1>
+<p>Vous pouvez également acheter des jetons en envoyant des BNB directement depuis votre portefeuille à ce contrat<br>
+(veuillez augmenter la limite de gaz à 200 000 ou même plus pour les jetons avec des fonctions spéciales comme autoLP, swaps, etc.)</p>
+<p><a href="https://testnet.bscscan.com/address/0x75E4fd02637a7BF35D5Bf10BB25C4AA7c64b2096 " target="_blank" id="saleAddress">0x75E4fd02637a7BF35D5Bf10BB25C4AA7c64b2096</a> <button id="copySale" style="text-align: center">Copier l'adresse</button></p>
+<div style="text-align: center" id="saleqr"></ div>
+</div>
+<hr>
+
+<script src='https://dappbuilder.org/js/jquery-3.6.0.min.js' type="text/javascript" charset="utf-8">< /script>
+<script src='https://dappbuilder.org/js/ethers-5.0.umd.min.js' type="text/javascript" charset="utf-8"></script>
+<script src='https://dappbuilder.org/bsc/tokensale2/js/tokensale.ui.js' type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
